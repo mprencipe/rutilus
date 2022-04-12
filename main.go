@@ -8,6 +8,7 @@ import (
 
 	"rutilus/internal/check"
 	"rutilus/internal/check/iam/root_account_not_used"
+	"rutilus/internal/check/iam/unused_accounts_disabled"
 	"rutilus/internal/check/iam/user_mfa"
 	rutilusConfig "rutilus/internal/config"
 	"rutilus/internal/util"
@@ -25,6 +26,7 @@ const BANNER = `
 var checks = []check.Check{
 	&root_account_not_used.RootAccountNotUsed{},
 	&user_mfa.UsersWithPasswordsHaveMFA{},
+	&unused_accounts_disabled.UnusedAccountsDisabled{},
 }
 
 func main() {

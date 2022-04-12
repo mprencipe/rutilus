@@ -82,7 +82,7 @@ func GenerateCredentialReport() {
 }
 
 func parseTime(str string, desc string) *time.Time {
-	if str == "N/A" || str == "no_information" {
+	if str == "N/A" || str == "no_information" || str == "not_supported" {
 		return nil
 	}
 	parsedTime, err := time.Parse(time.RFC3339, str)
