@@ -4,14 +4,16 @@ import (
 	"rutilus/internal/util"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCheckRootAccountUsed_NoRootUser(t *testing.T) {
 	report := &util.CredentialReport{}
+
 	_, err := CheckRootAccountUsed(report)
-	if err == nil {
-		t.Fatalf("Expected error")
-	}
+
+	assert.NotNil(t, err, "Expected error")
 }
 
 func TestCheckRootAccountUsed_NotRecentlyUsed(t *testing.T) {
@@ -22,13 +24,11 @@ func TestCheckRootAccountUsed_NotRecentlyUsed(t *testing.T) {
 			AccessKey1LastUsed: &accessKeyLastUsed,
 		},
 	}}
+
 	result, err := CheckRootAccountUsed(report)
-	if err != nil {
-		t.Fatalf("Unexpected error")
-	}
-	if result {
-		t.Fatalf("Expected root account not used")
-	}
+
+	assert.Nil(t, err, "Unexpected error")
+	assert.False(t, result, "Expected root account not used")
 }
 
 func TestCheckRootAccountUsed_RecentlyUsed(t *testing.T) {
@@ -39,11 +39,9 @@ func TestCheckRootAccountUsed_RecentlyUsed(t *testing.T) {
 			AccessKey1LastUsed: &accessKeyLastUsed,
 		},
 	}}
+
 	result, err := CheckRootAccountUsed(report)
-	if err != nil {
-		t.Fatalf("Unexpected error")
-	}
-	if !result {
-		t.Fatalf("Expected root account was used")
-	}
+
+	assert.Nil(t, err, "Unexpected error")
+	assert.True(t, result, "Expected root account used")
 }
