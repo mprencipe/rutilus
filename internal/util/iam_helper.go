@@ -14,19 +14,6 @@ import (
 
 var client *iam.Client
 
-type CredentialUser struct {
-	UserName           string
-	PasswordEnabled    *bool
-	MfaActive          *bool
-	PasswordLastUsed   *time.Time
-	AccessKey1LastUsed *time.Time
-	AccessKey2LastUsed *time.Time
-}
-
-type CredentialReport struct {
-	Users []CredentialUser
-}
-
 /*
 Report CSV format
 0	user
@@ -52,6 +39,35 @@ Report CSV format
 21	cert_2_active
 22	cert_2_last_rotated
 */
+type CredentialUser struct {
+	UserName                  string
+	Arn                       string
+	UserCreationTime          *time.Time
+	PasswordEnabled           *bool
+	PasswordLastUsed          *time.Time
+	PasswordLastChanged       *time.Time
+	PasswordNextRotation      *time.Time
+	MfaActive                 *bool
+	AccessKey1Active          *bool
+	AccessKey1LastRotated     *time.Time
+	AccessKey1LastUsed        *time.Time
+	AccessKey1LastUsedRegion  string
+	AccessKey1LastUsedService string
+	AccessKey2Active          *bool
+	AccessKey2LastRotated     *time.Time
+	AccessKey2LastUsed        *time.Time
+	AccessKey2LastUsedRegion  string
+	AccessKey2LastUsedService string
+	Cert1Active               *bool
+	Cert1LastRotated          *time.Time
+	Cert2Active               *bool
+	Cert2LastRotated          *time.Time
+}
+
+type CredentialReport struct {
+	Users []CredentialUser
+}
+
 var report *CredentialReport
 
 func GenerateCredentialReport() {
@@ -99,11 +115,27 @@ func buildReport(credReport *iam.GetCredentialReportOutput) {
 		columns := strings.Split(line, ",")
 		user := CredentialUser{}
 		user.UserName = columns[0]
+		user.Arn = columns[1]
+		user.UserCreationTime = parseTime(columns[2], "UserCreationTime")
 		user.PasswordEnabled = parseBool(columns[3], "PasswordEnabled")
-		user.MfaActive = parseBool(columns[7], "MfaActive")
 		user.PasswordLastUsed = parseTime(columns[4], "PasswordLastUsed")
+		user.PasswordNextRotation = parseTime(columns[6], "PasswordNextRotation")
+		user.PasswordLastUsed = parseTime(columns[6], "PasswordLastUsed")
+		user.MfaActive = parseBool(columns[7], "MfaActive")
+		user.AccessKey1Active = parseBool(columns[8], "AccessKey1Active")
+		user.AccessKey1LastRotated = parseTime(columns[9], "AccessKey1LastRotated")
 		user.AccessKey1LastUsed = parseTime(columns[10], "AccessKey1LastUsed")
-		user.AccessKey1LastUsed = parseTime(columns[15], "AccessKey1LastUsed")
+		user.AccessKey1LastUsedRegion = columns[11]
+		user.AccessKey1LastUsedService = columns[12]
+		user.AccessKey2Active = parseBool(columns[13], "AccessKey2Active")
+		user.AccessKey2LastRotated = parseTime(columns[14], "AccessKey2LastRotated")
+		user.AccessKey2LastUsed = parseTime(columns[15], "AccessKey2LastUsed")
+		user.AccessKey2LastUsedRegion = columns[16]
+		user.AccessKey2LastUsedService = columns[17]
+		user.Cert1Active = parseBool(columns[18], "Cert1Active")
+		user.Cert1LastRotated = parseTime(columns[19], "Cert1LastRotated")
+		user.Cert2Active = parseBool(columns[20], "Cert2Active")
+		user.Cert2LastRotated = parseTime(columns[21], "Cert2LastRotated")
 		report.Users = append(report.Users, user)
 	}
 }
