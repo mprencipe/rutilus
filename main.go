@@ -10,6 +10,7 @@ import (
 	root_account_not_used "rutilus/internal/check/iam/1.1_root_account_not_used"
 	user_mfa "rutilus/internal/check/iam/1.2_user_mfa"
 	unused_accounts_disabled "rutilus/internal/check/iam/1.3_unused_accounts_disabled"
+	rotated_access_keys "rutilus/internal/check/iam/1.4_rotated_access_keys"
 	rutilusConfig "rutilus/internal/config"
 	"rutilus/internal/util"
 
@@ -27,6 +28,7 @@ var checks = []check.Check{
 	&root_account_not_used.RootAccountNotUsed{},
 	&user_mfa.UsersWithPasswordsHaveMFA{},
 	&unused_accounts_disabled.UnusedAccountsDisabled{},
+	&rotated_access_keys.RotatedAccessKeys{},
 }
 
 func main() {

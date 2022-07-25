@@ -13,22 +13,11 @@ func (c *UnusedAccountsDisabled) Describe() string {
 	return "Unused users (90 days) are disabled"
 }
 
-func anyTimeIsNotNilAndLaterThan(laterThan time.Time, timesToBeChecked []*time.Time) bool {
-	for _, timeToBeChecked := range timesToBeChecked {
-		if timeToBeChecked != nil {
-			if timeToBeChecked.Before(laterThan) {
-				return true
-			}
-		}
-	}
-	return false
-}
-
 func FindUnusedUsers(report *util.CredentialReport) []util.CredentialUser {
 	ret := make([]util.CredentialUser, 0)
 	for _, u := range report.Users {
 		if u.PasswordEnabled != nil && *u.PasswordEnabled {
-			if anyTimeIsNotNilAndLaterThan(
+			if util.AnyTimeIsNotNilAndLaterThan(
 				time.Now().AddDate(0, 0, -90), []*time.Time{
 					u.PasswordLastUsed,
 					u.PasswordLastChanged,
