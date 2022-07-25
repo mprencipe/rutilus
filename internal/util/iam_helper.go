@@ -69,6 +69,7 @@ type CredentialReport struct {
 }
 
 var report *CredentialReport
+var passwordPolicy *iam.GetAccountPasswordPolicyOutput
 
 func GenerateCredentialReport() {
 	log.Debug("Generating IAM credentials report")
@@ -151,4 +152,18 @@ func GetCredentialReport() *CredentialReport {
 	}
 
 	return report
+}
+
+func GetPasswordPolicy() *iam.GetAccountPasswordPolicyOutput {
+	if passwordPolicy == nil {
+		if client == nil {
+			client = iam.NewFromConfig(config.Config)
+		}
+		passwordPolicyOutput, err := client.GetAccountPasswordPolicy(context.TODO(), &iam.GetAccountPasswordPolicyInput{})
+		if err != nil {
+			log.Fatalf("Couldn't get password policy, %v", err)
+		}
+		passwordPolicy = passwordPolicyOutput
+	}
+	return passwordPolicy
 }

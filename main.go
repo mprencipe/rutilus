@@ -11,6 +11,10 @@ import (
 	user_mfa "rutilus/internal/check/iam/1.2_user_mfa"
 	unused_accounts_disabled "rutilus/internal/check/iam/1.3_unused_accounts_disabled"
 	rotated_access_keys "rutilus/internal/check/iam/1.4_rotated_access_keys"
+	password_uppercase_letter "rutilus/internal/check/iam/1.5_password_uppercase_letter"
+	password_lowercase_letter "rutilus/internal/check/iam/1.6_password_lowercase_letter"
+	password_symbol "rutilus/internal/check/iam/1.7_password_symbol"
+	password_number "rutilus/internal/check/iam/1.8_password_number"
 	rutilusConfig "rutilus/internal/config"
 	"rutilus/internal/util"
 
@@ -29,6 +33,10 @@ var checks = []check.Check{
 	&user_mfa.UsersWithPasswordsHaveMFA{},
 	&unused_accounts_disabled.UnusedAccountsDisabled{},
 	&rotated_access_keys.RotatedAccessKeys{},
+	&password_uppercase_letter.PasswordUppercaseLetter{},
+	&password_lowercase_letter.PasswordLowercaseLetter{},
+	&password_symbol.PasswordSymbol{},
+	&password_number.PasswordNumber{},
 }
 
 func main() {
