@@ -7,9 +7,9 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"rutilus/internal/check"
-	"rutilus/internal/check/iam/root_account_not_used"
-	"rutilus/internal/check/iam/unused_accounts_disabled"
-	"rutilus/internal/check/iam/user_mfa"
+	root_account_not_used "rutilus/internal/check/iam/1.1_root_account_not_used"
+	user_mfa "rutilus/internal/check/iam/1.2_user_mfa"
+	unused_accounts_disabled "rutilus/internal/check/iam/1.3_unused_accounts_disabled"
 	rutilusConfig "rutilus/internal/config"
 	"rutilus/internal/util"
 
